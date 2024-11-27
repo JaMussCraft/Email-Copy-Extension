@@ -1,31 +1,30 @@
-// Regular expression to match email addresses
-const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+// Regular expression to match email addresses ending in @uky.edu
+const emailRegex = /\b[a-zA-Z0-9._%+-]+@uky\.edu\b/g;
+
+const button = null;
 
 function addCopyButtonToEmails() {
   // Find all the email addresses in the page
   const bodyText = document.body.innerHTML;
   const emailMatches = [...bodyText.matchAll(emailRegex)];
 
-  emailMatches.forEach(match => {
-    const email = match[0];
-    // Create a "copy" button element
-    const button = document.createElement("button");
-    button.textContent = "Copy";
-    button.style.marginLeft = "10px";
+  const dirDiv = document.getElementById('DirectoryInfoSection')
 
-    // Add event listener to copy the email to clipboard
-    button.addEventListener("click", () => {
-      navigator.clipboard.writeText(email).then(() => {
-        alert("Email copied to clipboard!");
-      });
-    });
+  const email = emailMatches[0][0];
+  console.log('found email: ', email)
 
-    // Insert the button next to the email address
-    const emailNode = match.input.slice(match.index, match.index + email.length);
-    const emailHtml = document.body.innerHTML;
-    document.body.innerHTML = emailHtml.replace(email, `${email} ${button.outerHTML}`);
+  // Create a "copy" button element
+  const button = document.createElement("button");
+  button.textContent = "Copy " + email;
+  button.style.marginLeft = "10px";
+
+  // // Add event listener to copy the email to clipboard
+  button.addEventListener("click", () => {
+    navigator.clipboard.writeText(email)
+    button.style.backgroundColor = 'lightgreen'
   });
+
+  dirDiv.append(button)
 }
 
-// Run the function to add copy buttons when the page loads
-window.addEventListener('DOMContentLoaded', addCopyButtonToEmails);
+window.addEventListener('load', addCopyButtonToEmails);
